@@ -1,5 +1,7 @@
 package entities;
 
+import exceptions.BusinessException;
+
 public class Account {
     private int number;
     private String holder;
@@ -19,9 +21,16 @@ public class Account {
         setBalance(getBalance() + amount);
         }
 
-        public void withdraw ( double amount){
-            if(getBalance() >= amount){
-                setBalance(getBalance() - amount);
+        public void withdraw ( double amount) throws BusinessException {
+            validateWithdraw(amount);
+            setBalance(getBalance() - amount);
+        }
+
+        private void validateWithdraw(double amount) throws BusinessException{
+        if(amount > getWithdrawLimit()){
+            throw new BusinessException("ERRO: O LIMITE DE SAQUE FOI EXCEDIDO!");
+        } if (amount > getBalance()){
+            throw new BusinessException("ERRO: SALDO INSUFICIENTE!");
             }
         }
 

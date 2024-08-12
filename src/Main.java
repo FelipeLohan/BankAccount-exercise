@@ -1,4 +1,5 @@
 import entities.Account;
+import exceptions.BusinessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +7,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        try{
+
             Scanner teclado = new Scanner(System.in);
             int opcao = 0;
             List<Account> accounts = new ArrayList<>();
@@ -40,18 +41,25 @@ public class Main {
                             for(Account a : accounts){
                                 a.deposit(amount);
                             }
+                            System.out.println("DEPOSITADO: R$" + amount);
                             break;
                         case 3:
                             System.out.println("Quanto deseja sacar? ");
                                 amount = teclado.nextDouble();
                                     teclado.nextLine();
                             for(Account a : accounts){
-                                a.withdraw(amount);
+                                try {
+                                    a.withdraw(amount);
+                                    System.out.println("SALDO ATUAL: R$" + a.getBalance());
+                                } catch (BusinessException e) {
+                                    System.out.println(e.getMessage());
+                                }
                             }
+
                             break;
                         case 4:
                             for(Account a : accounts){
-                                System.out.println(a.getBalance());
+                                System.out.println("SALDO ATUAL: " + a.getBalance());
                             }
                             break;
                         case 5:
@@ -62,9 +70,6 @@ public class Main {
                             break;
                     }
             } while (opcao != 5);
-        }
-        catch(Exception e){
-            System.out.println(e);
-        }
+
     }
 }
